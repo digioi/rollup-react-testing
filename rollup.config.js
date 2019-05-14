@@ -1,6 +1,7 @@
 import pkg from './package.json';
 import babel from 'rollup-plugin-babel';
 
+import replace from 'rollup-plugin-replace';
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import serve from 'rollup-plugin-serve'
@@ -36,6 +37,7 @@ const resolveConfig = true ? {
 
 const babelConfig = true ? {
   babelrc: false,
+  extensions,
   exclude: 'node_modules/**',
   runtimeHelpers: true,
   presets: [
@@ -47,16 +49,17 @@ const babelConfig = true ? {
         loose: true,
       }
     ],
-    // [
-    //   "@babel/preset-typescript",
-    //   {
-    //     "isTSX": true,
-    //     "allExtensions": true
-    //   }
-    // ],
+    [
+      "@babel/preset-typescript",
+      {
+        "isTSX": true,
+        "allExtensions": true
+      }
+    ],
     '@babel/preset-react',
   ],
   plugins: [
+    'macros'
     // "styled-jsx/babel"
   ]
 } : {}
@@ -73,9 +76,14 @@ const outputConfig = {
 }
 
 let RollupPlugins = [
+  babel(babelConfig),
+  replace({
+    'process.env.NODE_ENV': JSON.stringify(
+      process.env ? 'production' : 'development'
+    )
+  }),
   resolve(resolveConfig),
   commonjs(commonjsConfig),
-  babel(babelConfig),
   builtins(),
   globals(),
 ]
