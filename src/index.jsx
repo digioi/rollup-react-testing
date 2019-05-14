@@ -4,7 +4,7 @@ import { define, render } from 'hybrids';
 
 import SampleReactCompenent from './simple-component';
 
-// import SampleReactCompenent from './pdf.jsx';
+import ReactPDFCompenent from './pdf';
 
 // This function creates update callback, which uses react-dom
 // to render content in shadowRoot of the custom element.
@@ -17,11 +17,17 @@ function reactify(fn) {
   }
 }
 
-const ReactComponent = {
+define('react-web-component', {
   message: "",
   render: render(reactify(({ message }) =>
     <SampleReactCompenent message={message} />
   ), {shadowRoot: false}), // Needed because style macro fails otherwise
-};
+});
 
-define('react-web-component', ReactComponent);
+define('pdf-viewer', {
+  file: "",
+  render: render(reactify(({ file }) =>
+    <ReactPDFCompenent file={file} />
+  ), {shadowRoot: false}), // Needed because style macro fails otherwise
+});
+ 

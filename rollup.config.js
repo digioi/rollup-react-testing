@@ -1,15 +1,13 @@
 import pkg from './package.json';
 import babel from 'rollup-plugin-babel';
-import { uglify } from "rollup-plugin-uglify";
-import { minify } from 'uglify-es'
+
+import { terser } from "rollup-plugin-terser";
+
 import replace from 'rollup-plugin-replace';
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
-import serve from 'rollup-plugin-serve'
 import builtins from 'rollup-plugin-node-builtins';
 import globals from 'rollup-plugin-node-globals';
-
-import livereload from 'rollup-plugin-livereload'
 
 const ComponentName = pkg.componentName;
 
@@ -82,14 +80,10 @@ let RollupPlugins = [
   }),
   resolve(resolveConfig),
   commonjs(commonjsConfig),
-  // builtins(),
+  builtins(),
   globals(),
-  uglify({}, minify),
+  terser(),
 ]
-
-if (process.env['LIVE'] ){
-  RollupPlugins - [...RollupPlugins, serve({ open: true, contentBase: ['dist', 'demo'] }), livereload()]
-}
 
 const rollupConfig = {
   input: pkg.entry,

@@ -14,7 +14,7 @@ const HelloWorld : React.FC<HelloWorldProps>= (props) => {
   React.useEffect( () => setState(props.message || "Hello World"), [props.message])
   return (
     <div>
-      <Header>{message}</Header>\
+      <Header>{message}</Header>
       <input onChange={e => setState(e.target.value)} value={message} />
     </div>
   );
