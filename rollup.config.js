@@ -84,7 +84,7 @@ let RollupPlugins = [
   commonjs(commonjsConfig),
   // builtins(),
   globals(),
-  // uglify({}, minify),
+  uglify({}, minify),
 ]
 
 if (process.env['LIVE'] ){
