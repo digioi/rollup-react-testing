@@ -1,6 +1,7 @@
 import pkg from './package.json';
 import babel from 'rollup-plugin-babel';
-
+import { uglify } from "rollup-plugin-uglify";
+import { minify } from 'uglify-es'
 import replace from 'rollup-plugin-replace';
 import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
@@ -58,10 +59,7 @@ const babelConfig = true ? {
     ],
     '@babel/preset-react',
   ],
-  plugins: [
-    'macros'
-    // "styled-jsx/babel"
-  ]
+  plugins: ['macros']
 } : {}
 
 
@@ -84,8 +82,9 @@ let RollupPlugins = [
   }),
   resolve(resolveConfig),
   commonjs(commonjsConfig),
-  builtins(),
+  // builtins(),
   globals(),
+  // uglify({}, minify),
 ]
 
 if (process.env['LIVE'] ){

@@ -1,8 +1,9 @@
 import React from "react";
 
 import styled from '@emotion/styled/macro'
+import tw from 'tailwind.macro'
 
-const Header = styled.h1`color:aqua;`;
+const Header = styled.h1`color:aqua; ${tw`text-large bg-black`}`;
 
 const HelloWorld = (props) => {
   const [message, setState] = React.useState(props.message)
