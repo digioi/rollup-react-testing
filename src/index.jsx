@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { define, render } from 'hybrids';
 
-import SampleReactCompenent from './simple-component.jsx';
+import SampleReactCompenent from './simple-component';
 
 // import SampleReactCompenent from './pdf.jsx';
 

@@ -5,17 +5,16 @@ import tw from 'tailwind.macro'
 
 const Header = styled.h1`color:aqua; ${tw`text-large bg-black`}`;
 
-const HelloWorld = (props) => {
+interface HelloWorldProps {
+  message: string;
+}
+
+const HelloWorld : React.FC<HelloWorldProps>= (props) => {
   const [message, setState] = React.useState(props.message)
-  React.useEffect(_ => setState(props.message || "Hello World"), [props.message])
+  React.useEffect( () => setState(props.message || "Hello World"), [props.message])
   return (
     <div>
-      <Header>{message}</Header>
-      {/* <style jsx>{`
-        h1 {
-          color: red;
-        }
-      `}</style> */}
+      <Header>{message}</Header>\
       <input onChange={e => setState(e.target.value)} value={message} />
     </div>
   );
