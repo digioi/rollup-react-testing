@@ -34,7 +34,8 @@
     "tslib": "^1.9.3",
     "typescript": "^3.4.5"
   },
-  "peerDependencies": {},
+  "peerDependencies": {
+  },
   "dependencies": {
     "@react-pdf/renderer": "^1.5.6",
     "react": "^16.8.6",

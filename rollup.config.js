@@ -15,19 +15,22 @@ const extensions = [ '.mjs', '.js', '.jsx', '.json', ".ts", ".tsx" ]
 
 const browserTargets = pkg.browswerlist || "";
 
-const externals = false ? Object.keys(pkg.dependencies || {}) : undefined;
+const externals = true ? Object.keys(pkg.dependencies || {}) : undefined;
 
 const commonjsConfig = true ? {
   extensions,
-  modulesOnly: false,
+  // modulesOnly: false,
   include: 'node_modules/**',
-
+  namedExports: {
+    'react': ['Fragment', 'useEffect', 'useState', 'Children', 'Component', 'PropTypes', 'createElement'],
+    'react-dom': ['render']
+  }
 } : {}
 
 const resolveConfig = true ? {
   extensions,
   namedExports: {
-    'node_modules/react/index.js': ['Fragments', 'useEffect', 'useState', 'Children', 'Component', 'PropTypes', 'createElement'],
+    'react': ['Fragment', 'useEffect', 'useState', 'Children', 'Component', 'PropTypes', 'createElement'],
   },
   dedupe: ['react']
 } : {}
@@ -45,7 +48,6 @@ const babelConfig = true ? {
         loose: true,
       }
     ],
-    '@babel/preset-react',
     // [
     //   "@babel/preset-typescript",
     //   {
@@ -53,6 +55,7 @@ const babelConfig = true ? {
     //     "allExtensions": true
     //   }
     // ],
+    '@babel/preset-react',
   ],
   plugins: [
     // "styled-jsx/babel"
@@ -74,9 +77,7 @@ const outputConfig = {
 let RollupPlugins = [
   resolve(resolveConfig),
   commonjs(commonjsConfig),
-  babel(babelConfig),
-  globals(),
-  builtins(),
+  babel(babelConfig)
 ]
 
 if (process.env['LIVE'] ){
@@ -87,7 +88,7 @@ const rollupConfig = {
   input: pkg.entry,
   output: outputConfig,
   external: externals,
-  plugins: RollupPlugins
+  plugins: RollupPlugins,
 };
 
 const { plugins, ..._config } = rollupConfig
