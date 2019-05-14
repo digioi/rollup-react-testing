@@ -15,7 +15,7 @@ const extensions = [ '.mjs', '.js', '.jsx', '.json', ".ts", ".tsx" ]
 
 const browserTargets = pkg.browswerlist || "";
 
-const externals = true ? Object.keys(pkg.dependencies || {}) : undefined;
+const externals = true ? Object.keys(pkg.peerDependencies || {}) : undefined;
 
 const commonjsConfig = true ? {
   extensions,
@@ -23,16 +23,15 @@ const commonjsConfig = true ? {
   include: 'node_modules/**',
   namedExports: {
     'react': ['Fragment', 'useEffect', 'useState', 'Children', 'Component', 'PropTypes', 'createElement'],
-    'react-dom': ['render']
+    'react-dom': ['render'],
+    'react-pdf/dist/entry': ['pdfjs', 'Document', 'Page'],
+    'react-pdf/dist/entry.parcel': ['pdfjs', 'Document', 'Page']
   }
 } : {}
 
 const resolveConfig = true ? {
   extensions,
-  namedExports: {
-    'react': ['Fragment', 'useEffect', 'useState', 'Children', 'Component', 'PropTypes', 'createElement'],
-  },
-  dedupe: ['react']
+  dedupe: ['react', 'react-dom']
 } : {}
 
 const babelConfig = true ? {
@@ -65,19 +64,20 @@ const babelConfig = true ? {
 
 const outputConfig = {
   file: pkg.main,
-  format: "iife",
+  format: "umd",
   name: ComponentName,
   globals: {
     'react': 'React',
-    'react-dom': 'ReactDOM',
-    '@react-pdf/renderer': "ReactPDF",
+    'react-dom': 'ReactDOM'
   },
 }
 
 let RollupPlugins = [
   resolve(resolveConfig),
   commonjs(commonjsConfig),
-  babel(babelConfig)
+  babel(babelConfig),
+  builtins(),
+  globals(),
 ]
 
 if (process.env['LIVE'] ){

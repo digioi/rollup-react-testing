@@ -1,41 +1,41 @@
 import React from "react";
-import { PDFViewer, Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+import { pdfjs, Document, Page  } from 'react-pdf/dist/entry';
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-// Create styles
-const styles = StyleSheet.create({
-  page: {
-    flexDirection: 'row',
-    backgroundColor: '#E4E4E4'
-  },
-  section: {
-    margin: 10,
-    padding: 10,
-    flexGrow: 1
-  }
-});
-
-// Create Document Component
-const MyDocument = ({ message }) => (
-  <Document>
-    <Page size="A4" style={styles.page}>
-      <View style={styles.section}>
-        <Text>Section #1</Text>
-      </View>
-      <View style={styles.section}>
-        <Text>{message}</Text>
-      </View>
-    </Page>
-  </Document>
-);
-
+const MyDocument = (props) => {
+  const [{numPages, pageNumber}, dispatch] = React.useReducer((state, action) => {
+    switch (action.type) {
+      case "UPDATE_PAGE_COUNT": 
+        return {...state, numPages: action.value};
+      case "INCREMENT_CURRENT_PAGE": 
+        return { ...state, pageNumber: (numPages == state.pageNumber ? state.pageNumber : state.pageNumber + 1) };
+      case "DECREMENT_CURRENT_PAGE":
+        return { ...state, pageNumber: (numPages == state.pageNumber ? state.pageNumber : state.pageNumber + 1) };
+    }
+  }, {
+    numPages: null, 
+    pageNumber: 1,
+  })
+  
+  const onDocumentLoadSuccess = ({ numPages }) => dispatch({type: "UPDATE_PAGE_COUNT", numPages})
+  return (
+    <div>
+      <Document
+        file={props.file}
+        onLoadSuccess={onDocumentLoadSuccess}
+      >
+        <Page pageNumber={pageNumber} />
+      </Document>
+      <p>Page {pageNumber} of {numPages}</p>
+    </div>
+  );
+}
 
 const HelloWorld = (props) => {
   const [message, setState] = React.useState(props.message)
   React.useEffect(_ => setState(props.message || "Hello World"), [props.message])
   return (
-    <PDFViewer>
-      <MyDocument message={message} />
-    </PDFViewer>
+    <MyDocument file="demo/test.pdf" />
   );
 }
 export default HelloWorld;
