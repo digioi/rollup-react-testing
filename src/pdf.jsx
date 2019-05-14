@@ -35,7 +35,7 @@ const HelloWorld = (props) => {
   const [message, setState] = React.useState(props.message)
   React.useEffect(_ => setState(props.message || "Hello World"), [props.message])
   return (
-    <MyDocument file="demo/test.pdf" />
+    <MyDocument file="test.pdf" />
   );
 }
 export default HelloWorld;

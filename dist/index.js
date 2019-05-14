@@ -99016,7 +99016,7 @@
       return setState(props.message || "Hello World");
     }, [props.message]);
     return React.createElement(MyDocument, {
-      file: "demo/test.pdf"
+      file: "test.pdf"
     });
   };
 
